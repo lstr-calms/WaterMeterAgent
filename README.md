@@ -226,43 +226,6 @@ unit_map = {
 - `pydantic>=2.0.0`
 - OpenAI API key (subscription required)
 
-## Implementation Comparison
-
-| Feature | Original ReAct | Local LangChain-Style | LangChain API |
-|---------|----------------|----------------------|---------------|
-| **API Dependencies** | None | None | OpenAI API Required |
-| **Processing Speed** | Very Fast | Fast | Moderate (API calls) |
-| **Tool Framework** | Manual functions | LangChain-inspired tools | Full LangChain tools |
-| **Ambiguous Input Handling** | Rule-based | Enhanced rule-based | AI-powered reasoning |
-| **Extensibility** | Manual tool addition | Structured tool classes | LangChain tool framework |
-| **Deterministic Results** | Yes | Yes | Mostly (LLM dependent) |
-| **Natural Language Understanding** | Limited | Enhanced | Advanced |
-| **Cost** | Free | Free | API usage costs |
-| **Offline Capability** | Yes | Yes | No |
-| **Execution Tracing** | Basic | Detailed | Advanced |
-| **Best For** | Simple, fast parsing | Local structured parsing | Complex AI reasoning |
-
-### When to Use Which Implementation
-
-**Use Original Implementation when:**
-- You need the fastest possible parsing
-- Working with well-formatted input
-- Minimal dependencies required
-- Simple integration needed
-
-**Use Local LangChain-Style Implementation when:**
-- You want structured tool framework benefits
-- Need enhanced traceability and debugging
-- Working with moderately complex input
-- Avoiding external API dependencies
-- Want extensible architecture without complexity
-
-**Use LangChain API Implementation when:**
-- Handling very diverse, ambiguous input formats
-- Need advanced natural language understanding
-- Building conversational interfaces
-- Extending with complex reasoning capabilities
-- Integration with other LangChain components
 
 ## Example Output
 
@@ -298,55 +261,4 @@ THINKING:
 📅 Date: 2025-07-20
 ```
 
-## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Add tests for new functionality
-4. Submit a pull request
-
-## License
-
-This project is open source. Please check the license file for details.
-
-## Troubleshooting
-
-### Voice Input Issues
-- Ensure microphone permissions are granted
-- Check that `pyaudio` is properly installed
-- Verify microphone is working with other applications
-
-### Recognition Issues
-- Speak clearly and at moderate pace
-- Ensure good audio quality (minimal background noise)
-- Include meter identifier in speech ("Kitchen meter", "WM001", etc.)
-
-### Range Validation Warnings
-- Check if reading values are realistic for the meter type
-- Verify units are correct
-- Consider if this might be a cumulative vs. period reading
-
-## Future Enhancements
-
-### Original Implementation
-- Multi-threading for batch processing
-- Configuration file support
-- Additional unit types and meter models
-- Enhanced duplicate detection algorithms
-
-### LangChain Implementation  
-- Integration with vector databases for meter history
-- Custom fine-tuned models for domain-specific parsing
-- Multi-agent coordination for complex scenarios
-- Integration with smart home IoT devices
-- Conversation memory for context-aware parsing
-- Support for additional LLM providers (Anthropic, local models)
-
-### Both Implementations
-- Database integration for reading history
-- Support for multiple reading formats (CSV, JSON)
-- Web interface for easier interaction
-- Integration with IoT water meter devices
-- Support for additional languages
-- Mobile app integration
-- Real-time monitoring dashboards
