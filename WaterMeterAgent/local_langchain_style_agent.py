@@ -5,7 +5,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from datetime import datetime
 from difflib import SequenceMatcher
 
-# Voice input support - Enhanced version
+# Voice input 
 from voice_input import VoiceInputHandler
 
 def get_voice_input() -> str:
@@ -14,7 +14,7 @@ def get_voice_input() -> str:
     result = handler.get_voice_input_interactive()
     return result or ""
 
-# Simple Tool Classes (LangChain-inspired but without inheritance issues)
+# Simple Tool Classes 
 class SimpleTool:
     """Base class for simple tools"""
     def __init__(self, name: str, description: str):
@@ -34,11 +34,11 @@ class CleanTextTool(SimpleTool):
     
     def run(self, raw_text: str) -> str:
         """Remove extra whitespace and normalize text"""
-        print(f"🧹 Cleaning text: '{raw_text}'")
+        print(f" Cleaning text: '{raw_text}'")
         cleaned = re.sub(r'\s+', ' ', raw_text.strip())
         cleaned = re.sub(r'[^\w\s\.\-:/]', ' ', cleaned)
         result = cleaned.upper()
-        print(f"   ✅ Cleaned: '{result}'")
+        print(f"    Cleaned: '{result}'")
         return result
 
 class ExtractNumbersTool(SimpleTool):
@@ -50,11 +50,11 @@ class ExtractNumbersTool(SimpleTool):
     
     def run(self, text: str) -> str:
         """Extract numeric values from text"""
-        print(f"🔢 Extracting numbers from: '{text}'")
+        print(f" Extracting numbers from: '{text}'")
         pattern = r'\d+\.?\d*'
         matches = re.findall(pattern, text)
         numbers = [float(match) for match in matches]
-        print(f"   ✅ Found numbers: {numbers}")
+        print(f"    Found numbers: {numbers}")
         return json.dumps(numbers)
 
 class MeterIdentificationTool(SimpleTool):
@@ -68,15 +68,15 @@ class MeterIdentificationTool(SimpleTool):
     
     def run(self, text: str) -> str:
         """Find best meter match"""
-        print(f"🏷️  Identifying meter from: '{text}'")
+        print(f"  Identifying meter from: '{text}'")
         
         # Try direct tag matching first
         for tag in self.meter_tags.keys():
             if tag in text:
-                print(f"   ✅ Direct tag match: {tag}")
+                print(f"    Direct tag match: {tag}")
                 return tag
         
-        # Try fuzzy matching with meter tags
+        # fuzzy matching with meter tags
         best_match = None
         best_score = 0.0
         threshold = 0.6
@@ -88,13 +88,13 @@ class MeterIdentificationTool(SimpleTool):
                 best_match = tag
         
         if best_match:
-            print(f"   ✅ Fuzzy tag match: {best_match} (score: {best_score:.2f})")
+            print(f"    Fuzzy tag match: {best_match} (score: {best_score:.2f})")
             return best_match
         
         # Try name-based lookup
         for name, tag in self.name_to_tag.items():
             if name in text:
-                print(f"   ✅ Name-based match: {name} -> {tag}")
+                print(f"    Name-based match: {name} -> {tag}")
                 return tag
         
         # Try fuzzy matching with names
@@ -105,10 +105,10 @@ class MeterIdentificationTool(SimpleTool):
                 best_match = self.name_to_tag[name]
         
         if best_match:
-            print(f"   ✅ Fuzzy name match: {best_match} (score: {best_score:.2f})")
+            print(f"    Fuzzy name match: {best_match} (score: {best_score:.2f})")
             return best_match
         
-        print(f"   ❌ No meter identified")
+        print(f"    No meter identified")
         return "UNKNOWN"
 
 class StandardizeUnitTool(SimpleTool):
@@ -138,10 +138,10 @@ class StandardizeUnitTool(SimpleTool):
 
         for variant, standard in unit_map.items():
             if variant in text:
-                print(f"   ✅ Found unit: {variant} -> {standard}")
+                print(f"    Found unit: {variant} -> {standard}")
                 return standard
 
-        print(f"   ⚠️  No unit found, defaulting to cubic_meters")
+        print(f"     No unit found, defaulting to cubic_meters")
         return 'cubic_meters'
 
 class ValidateRangeTool(SimpleTool):
@@ -153,7 +153,7 @@ class ValidateRangeTool(SimpleTool):
     
     def run(self, value_unit: str) -> str:
         """Check if reading is within reasonable range"""
-        print(f"✅ Validating range for: {value_unit}")
+        print(f" Validating range for: {value_unit}")
         
         try:
             if ',' in value_unit:
@@ -166,7 +166,7 @@ class ValidateRangeTool(SimpleTool):
                 value = data.get('value', 0)
                 unit = data.get('unit', 'cubic_meters')
         except:
-            print(f"   ❌ Invalid format, expected 'value,unit' or JSON")
+            print(f"    Invalid format, expected 'value,unit' or JSON")
             return "INVALID_FORMAT"
         
         ranges = {
@@ -176,17 +176,17 @@ class ValidateRangeTool(SimpleTool):
         }
 
         if unit not in ranges:
-            print(f"   ⚠️  Unknown unit '{unit}' - cannot validate range")
+            print(f"    Unknown unit '{unit}' - cannot validate range")
             return f"UNKNOWN_UNIT"
 
         min_val, max_val, description = ranges[unit]
         is_valid = min_val <= value <= max_val
 
         if is_valid:
-            print(f"   ✅ Valid: {value} {unit} is within expected range")
+            print(f"    Valid: {value} {unit} is within expected range")
             return "VALID"
         else:
-            print(f"   ⚠️  Warning: {value} {unit} is outside expected range ({description})")
+            print(f"     Warning: {value} {unit} is outside expected range ({description})")
             return "OUT_OF_RANGE"
 
 class ParseDateTool(SimpleTool):
@@ -198,7 +198,7 @@ class ParseDateTool(SimpleTool):
     
     def run(self, text: str) -> str:
         """Extract date or return current date"""
-        print(f"📅 Parsing date from: '{text}'")
+        print(f" Parsing date from: '{text}'")
         
         patterns = [
             r'(\d{4}-\d{2}-\d{2})',
@@ -211,28 +211,25 @@ class ParseDateTool(SimpleTool):
             match = re.search(pattern, text)
             if match:
                 date_str = match.group(1)
-                print(f"   ✅ Found date: {date_str}")
+                print(f"    Found date: {date_str}")
                 return date_str
 
         # Check for relative dates
         if 'TODAY' in text:
             date_str = datetime.now().strftime('%Y-%m-%d')
-            print(f"   ✅ Today: {date_str}")
+            print(f"    Today: {date_str}")
             return date_str
         if 'YESTERDAY' in text:
             date_str = (datetime.now().replace(day=datetime.now().day - 1)).strftime('%Y-%m-%d')
-            print(f"   ✅ Yesterday: {date_str}")
+            print(f"    Yesterday: {date_str}")
             return date_str
 
         # Default to current date
         date_str = datetime.now().strftime('%Y-%m-%d')
-        print(f"   ⚠️  No date found, using current: {date_str}")
+        print(f"  No date found, using current: {date_str}")
         return date_str
 
 class LocalLangChainStyleAgent:
-    """
-    Local agent that uses LangChain-style tools and ReAct pattern without external dependencies
-    """
     
     def __init__(self):
         print("🔧 Initializing Local LangChain-Style Agent...")
@@ -278,7 +275,7 @@ class LocalLangChainStyleAgent:
         """
         Parse water meter reading using local ReAct pattern with LangChain-style tools
         """
-        print(f"\n🚀 LOCAL LANGCHAIN-STYLE AGENT STARTING PARSE: '{raw_input}'")
+        print(f"\n LOCAL LANGCHAIN-STYLE AGENT STARTING PARSE: '{raw_input}'")
         print("=" * 70)
         
         # Initialize parsing state
@@ -310,7 +307,7 @@ class LocalLangChainStyleAgent:
             return result
             
         except Exception as e:
-            print(f"❌ Local agent execution failed: {str(e)}")
+            print(f" Local agent execution failed: {str(e)}")
             return {
                 'success': False,
                 'error': str(e),
@@ -323,16 +320,16 @@ class LocalLangChainStyleAgent:
         max_steps = 8
         
         for step in range(1, max_steps + 1):
-            print(f"\n🧠 STEP {step} - THINKING:")
+            print(f"\n STEP {step} - THINKING:")
             
             # Decide next action based on current state
             action = self._think(state, step)
             
             if action == 'COMPLETE':
-                print("   🎯 All data collected, analysis complete!")
+                print("  All data collected, analysis complete!")
                 break
             elif action == 'FAIL':
-                print("   ❌ Cannot proceed - insufficient data")
+                print("  Cannot proceed - insufficient data")
                 state['warnings'].append('Parsing failed - insufficient data')
                 break
             
